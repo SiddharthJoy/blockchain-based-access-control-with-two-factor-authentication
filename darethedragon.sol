@@ -1,4 +1,4 @@
-pragma solidity ^0.7.1;
+pragma solidity ^0.8.0;
 
 contract Access_Control_Protocol{
     
@@ -7,6 +7,7 @@ contract Access_Control_Protocol{
     uint64 public now = 100;
     address[] public violation;
     uint64 public idx = 0;
+    string public state = "Null";
 
     address admin;
     mapping (address => uint64) public balanceOf;
@@ -137,12 +138,16 @@ event allow_access_event(bool allowed);
     
     function get_token_balance(address ad) public only_ressource_owner view returns(uint64)
     {
-        // return balanceOf[ad];
-        return unauthorizedAccess[ad];
+        return balanceOf[ad];
+        //return unauthorizedAccess[ad];
+    }
+
+    function setState(string memory _state) public {
+        state = _state;
     }
 
 
-function access_control_policy(address requester, string memory location_,bytes memory signature)public returns (bool) { 
+function access_control_policy(address requester, string memory location_,bytes memory signature)public returns (string memory) { 
     
     string memory loc = "serverroom";
     
@@ -151,9 +156,9 @@ function access_control_policy(address requester, string memory location_,bytes 
                 bytes32 messageHash = getMessageHash(location_, _uid); 
                 if(verify(msg.sender,location_,_uid,signature) == true){
                     transfer(requester,1);
-                    allow_access_event(true);
+                    //allow_access_event(true);
                     _uid++;
-                    return true;
+                    return state;
                 }
                 else{
                     unauthorizedAccess[requester]++;
@@ -161,8 +166,9 @@ function access_control_policy(address requester, string memory location_,bytes 
                     if(unauthorizedAccess[requester] == 3){
                          white_list[requester]=role.Blaclisted; 
                         unauthorizedAccess[requester] = 0;
+                        //return false;
                     }
-                 return true;
+                    return "Not Permitted";
                 }
     }
     else {
@@ -173,20 +179,23 @@ function access_control_policy(address requester, string memory location_,bytes 
             violation[idx++] = requester; 
             adds[requester]++;
             unauthorizedAccess[requester] = 0;
+            //return false;
         }
-        return true;
+        return "Not Permitted";
     }
 }
 
-function Access_Request(string memory ressource_, string memory location,bytes memory signature) public returns (bool){ 
+function Access_Request(string memory ressource_, string memory location,bytes memory signature) public returns (string memory){ 
      string memory res = "raspberry";
     if(keccak256(abi.encodePacked((ressource_))) == keccak256(abi.encodePacked((res))) && white_list[msg.sender] == role.NetworkEngineer || white_list[msg.sender]==role.Ressource_Owner)
     {
-        if(access_control_policy(msg.sender, location, signature)) return true;
-        return false;
+        return access_control_policy(msg.sender, location, signature);
+        // return "Not Permitted";
     }
      else{
-         revert();
+
+        // return false;
+        revert();
      }
 }
 
@@ -198,3 +207,5 @@ function token_back(uint64 amount) public{
 
 
 // ethereum.request({ method: "personal_sign", params: [account, hash]}).then(console.log)
+
+// 0x77611D748d44fa83ae85348E0497CDC7699d014b
