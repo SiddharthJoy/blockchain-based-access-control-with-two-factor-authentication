@@ -1,0 +1,116 @@
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Web 3 Demo</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.36/dist/web3.min.js" integrity="sha256-nWBTbvxhJgjslRyuAKJHK+XcZPlCnmIAAMixz6EefVk=" crossorigin="anonymous"></script>
+    
+</head>
+
+
+<body>
+
+	<script>var data;</script>
+    <script type="module">
+                    // Import the functions you need from the SDKs you need
+                    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.8/firebase-app.js";
+                    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.8/firebase-analytics.js";
+                    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.8/firebase-database.js";
+                    // TODO: Add SDKs for Firebase products that you want to use
+                    // https://firebase.google.com/docs/web/setup#available-libraries
+
+                    // Your web app's Firebase configuration
+                    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+                    const firebaseConfig = {
+                      apiKey: "AIzaSyBWlX7V0aa6BHRsqjRZ9GGz3sG7zFTJo60",
+                      authDomain: "project-ce84f.firebaseapp.com",
+                      databaseURL: "https://project-ce84f-default-rtdb.firebaseio.com",
+                      projectId: "project-ce84f",
+                      storageBucket: "project-ce84f.appspot.com",
+                      messagingSenderId: "798128275693",
+                      appId: "1:798128275693:web:7214b77399b3db3e870ce4",
+                      measurementId: "G-5M91TSNCPD"
+                    };
+
+                    // Initialize Firebase
+                    const app = initializeApp(firebaseConfig);
+                    const analytics = getAnalytics(app);
+
+                    const db = getDatabase();
+                    const starCountRef = ref(db, 'LED');
+                //let data;
+                    onValue(starCountRef, (snapshot) => {
+                        data = snapshot.val();
+                        console.log(data);
+                    });
+
+                  </script>
+
+                Web 3 Demo
+                <br >
+                <button onclick="printCoolNumber();">Print Cool Number</button>
+                <button onclick="changeCoolNumber();">Change Cool Number</button>
+                <br /><br />
+                Status: <span id="status">Loading...</span>
+
+
+
+
+                <script type="text/javascript">
+
+                    //Web3 = require('web3');
+               async function loadWeb3() {
+                   if (window.ethereum) {
+                       window.web3 = new Web3(window.ethereum);
+                       window.ethereum.enable();
+                  }
+                }
+
+               async function loadContract() {
+                   return await new window.web3.eth.Contract(ABI, Contract Address);       //  contract ABI & address are the actual arguments
+               }
+
+
+               console.log(data);
+
+
+              async function printCoolNumber() {
+                  updateStatus('fetching Cool Number...');
+                  var st = await window.contract.methods.state().call();
+                  updateStatus(`coolNumber: ${st}`);
+              }
+
+              async function getCurrentAccount() {
+                  const accounts = await window.web3.eth.getAccounts();
+                  return accounts[0];
+              }
+
+              async function changeCoolNumber() {
+                  updateStatus(`Updating State with ${data}`);
+                  const account = await getCurrentAccount();
+                  const coolNumber = await window.contract.methods.setState(data).send({ from: account });
+                  updateStatus('Updated.');
+              }
+
+              async function load() {
+                  await loadWeb3();
+                  window.contract = await loadContract();
+                  updateStatus('Ready!');
+              }
+
+              function updateStatus(status) {
+                  const statusEl = document.getElementById('status');
+                  statusEl.innerHTML = status;
+                  console.log(status);
+              }
+
+
+              load();  
+  </script>
+  
+</body>
+
+</html>
