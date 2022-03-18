@@ -9,8 +9,8 @@ https://github.com/mobizt/Firebase-ESP8266/
 #define FIREBASE_HOST "project-ce84f-default-rtdb.firebaseio.com"                     //Your Firebase Project URL goes here without "http:" , "\" and "/"
 #define FIREBASE_AUTH "hEZLG22ZTE0JnF0HWZa5tyMYXBfe9m4sQWzXwP5m" //Your Firebase Database Secret goes here
 
-#define WIFI_SSID "Jun_Sparking"
-#define WIFI_PASSWORD "emergency 786"                                  //Password of your wifi network 
+#define WIFI_SSID "XXXXXXX"
+#define WIFI_PASSWORD "YYYYYYY"                                  //Password of your wifi network 
 #define ON "on"
 #define OFF "off"
  
