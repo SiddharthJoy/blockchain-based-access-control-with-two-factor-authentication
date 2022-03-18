@@ -1,13 +1,6 @@
-/* 
- 
- Created by:- Rishi Tiwari
- Website:- TrickSumo.com
- Video Tutorial:- https://youtu.be/nLzC0-VaqDs
- 
- Libraries used:- 
-
+/*  
+Libraries used:- 
 https://github.com/mobizt/Firebase-ESP8266/
-
 */
 
 #include <ESP8266WiFi.h>
