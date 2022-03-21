@@ -7,7 +7,9 @@ contract Access_Control_Protocol{
     uint64 public now = 100;
     address[] public violation;
     uint64 public idx = 0;
-    string public state = "Null";
+    string public state = "off";
+    string public got;
+    // uint64 public toggle = 1;
 
     address admin;
     mapping (address => uint64) public balanceOf;
@@ -151,10 +153,10 @@ function access_control_policy(address requester, string memory location_,bytes 
     
     string memory loc = "serverroom";
     
-    if(keccak256(abi.encodePacked((location_))) == keccak256(abi.encodePacked((loc))) && now <= time_end && now >= time_start)
+    if(keccak256(abi.encodePacked((location_))) == keccak256(abi.encodePacked((loc))))
     {
                 bytes32 messageHash = getMessageHash(location_, _uid); 
-                if(verify(msg.sender,location_,_uid,signature) == true){
+                if(verify(msg.sender,location_,1,signature) == true){
                     transfer(requester,1);
                     //allow_access_event(true);
                     _uid++;
@@ -187,15 +189,16 @@ function access_control_policy(address requester, string memory location_,bytes 
 
 function Access_Request(string memory ressource_, string memory location,bytes memory signature) public returns (string memory){ 
      string memory res = "raspberry";
-    if(keccak256(abi.encodePacked((ressource_))) == keccak256(abi.encodePacked((res))) && white_list[msg.sender] == role.NetworkEngineer || white_list[msg.sender]==role.Ressource_Owner)
+    if(keccak256(abi.encodePacked((ressource_))) == keccak256(abi.encodePacked((res))) && white_list[msg.sender] == role.NetworkEngineer || white_list[msg.sender]==role.Ressource_Owner || white_list[msg.sender]==role.Service_Provider)
     {
-        return access_control_policy(msg.sender, location, signature);
+        got = access_control_policy(msg.sender, location, signature);
+        return got;
         // return "Not Permitted";
     }
      else{
-
+         return "Not Permitted";
         // return false;
-        revert();
+        //revert();
      }
 }
 
@@ -203,9 +206,33 @@ function token_back(uint64 amount) public{
     _transfer(msg.sender,ad_device_owner,amount);
 }
 
+function toggle(string memory ressource_, string memory location,bytes memory signature) public returns (string memory){
+    require(white_list[msg.sender]==role.Service_Provider);
+    string memory result = Access_Request(ressource_,location,signature);
+    if(keccak256(abi.encodePacked((result))) == keccak256(abi.encodePacked(("Not Permitted")))) return result;
+    else{
+        if(keccak256(abi.encodePacked((result))) == keccak256(abi.encodePacked(("on")))){
+            state = "off";
+            return "LED was ON,Toggled to OFF";
+        }
+        else if(keccak256(abi.encodePacked((result))) == keccak256(abi.encodePacked(("off")))){
+            state = "on";
+            return "LED was OFF,Toggled to ON";
+        }
+        else{
+            return "LED state is NULL";
+        }
+    } 
 }
+
+}
+
 
 
 // ethereum.request({ method: "personal_sign", params: [account, hash]}).then(console.log)
 
 // 0x77611D748d44fa83ae85348E0497CDC7699d014b
+
+//  0xc6145f8562fe132a277c592b7eaeff400ffe2fe2140acf84a678013f3f2bea6b
+
+// 0x1f11a61c7f1135d3d9523344e0b5ff94b36764195a0ba7e63feecd6148bf9eb51dea66a6327fc198b1af982460a1f55689218a20d8dedbaf39c757e3d72e1c4b1b
