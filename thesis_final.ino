@@ -1,4 +1,4 @@
-/*  
+/* 
 Libraries used:- 
 https://github.com/mobizt/Firebase-ESP8266/
 */
@@ -9,8 +9,8 @@ https://github.com/mobizt/Firebase-ESP8266/
 #define FIREBASE_HOST "project-ce84f-default-rtdb.firebaseio.com"                     //Your Firebase Project URL goes here without "http:" , "\" and "/"
 #define FIREBASE_AUTH "hEZLG22ZTE0JnF0HWZa5tyMYXBfe9m4sQWzXwP5m" //Your Firebase Database Secret goes here
 
-#define WIFI_SSID "XXXXXXX"
-#define WIFI_PASSWORD "YYYYYYY"                                  //Password of your wifi network 
+#define WIFI_SSID "XXXXXXXXXXXXX"
+#define WIFI_PASSWORD "987654321"                                  //Password of your wifi network 
 #define ON "on"
 #define OFF "off"
  
@@ -18,11 +18,6 @@ https://github.com/mobizt/Firebase-ESP8266/
 
 // Declare the Firebase Data object in the global scope
 FirebaseData firebaseData;
-
-// Declare global variable to store value
-int val=0;
-
-
 
 void setup() {
 
@@ -63,42 +58,24 @@ void loop() {
 
 // Firebase Error Handling And Writing Data At Specifed Path************************************************
 
-  digitalWrite(D8, HIGH);   
+     
   val = digitalRead(D8);
+  String response;
 
-if (Firebase.setString(firebaseData, "/LED", ON)) {    // On successful Write operation, function returns 1  
-               Serial.println("Value Uploaded Successfully");
-               Serial.print("Val = ");
-               Serial.println(val);
-               Serial.println("\n");
-               
-               val++;
-               delay(1000);
-
-     }
-
-else {        
-    Serial.println(firebaseData.errorReason());
+  val = Firebase.getString(firebaseData, "/LED");
+  if(val){
+    if (firebaseData.dataTypeEnum() == fb_esp_rtdb_data_type_string) {
+      response = firebaseData.to<String>();
+    }
   }
-
-  digitalWrite(D8, LOW);
-  //delay(5000);
-
-  if (Firebase.setString(firebaseData, "/LED", OFF)) {    // On successful Write operation, function returns 1  
-               Serial.println("Value Uploaded Successfully");
-               Serial.print("Val = ");
-               Serial.println(val);
-               Serial.println("\n");
-               
-               val++;
-               delay(1000);
-
-     }
-
-else {        
-    Serial.println(firebaseData.errorReason());
-  }
-
+  
+  if (response == "on") {    // On successful Write operation, function returns 1 
+     digitalWrite(D8, HIGH);
+     delay(1000);
+  
+  }  
+  else digitalWrite(D8, LOW);        
+  
 }
 
 
