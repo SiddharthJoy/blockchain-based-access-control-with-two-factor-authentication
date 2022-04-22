@@ -1,2 +1,2 @@
 # verbose-waffle
-Blockchain based IoT access control policy
+Blockchain based IoT device access control framework with two factor authentication.
