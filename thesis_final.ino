@@ -6,8 +6,8 @@ https://github.com/mobizt/Firebase-ESP8266/
 #include <ESP8266WiFi.h>
 #include <FirebaseESP8266.h>
                           
-#define FIREBASE_HOST "project-ce84f-default-rtdb.firebaseio.com"                     //Your Firebase Project URL goes here without "http:" , "\" and "/"
-#define FIREBASE_AUTH "hEZLG22ZTE0JnF0HWZa5tyMYXBfe9m4sQWzXwP5m" //Your Firebase Database Secret goes here
+#define FIREBASE_HOST "project-****-default-rtdb.firebaseio.com"     //Your Firebase Project URL goes here without "http:" , "\" and "/"
+#define FIREBASE_AUTH "hEZLG22ZTE*********yMYXBfe9m4sQWzXwP5m"     //Your Firebase Database Secret goes here
 
 #define WIFI_SSID "XXXXXXXXXXXXX"
 #define WIFI_PASSWORD "987654321"                                  //Password of your wifi network 
@@ -21,8 +21,7 @@ FirebaseData firebaseData;
 
 void setup() {
 
-  Serial.begin(115200);                                   // Select the same baud rate if you want to see the datas on Serial Monitor
-
+  Serial.begin(115200);                                   
   Serial.println("Serial communication started\n\n");  
            
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);                                     //try to connect with wifi
