@@ -13,46 +13,48 @@
 
 <body>
 
-	<script>var data;</script>
-    <script type="module">
-                    // Import the functions you need from the SDKs you need
-                    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.8/firebase-app.js";
-                    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.8/firebase-analytics.js";
-                    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.8/firebase-database.js";
-                    // TODO: Add SDKs for Firebase products that you want to use
-                    // https://firebase.google.com/docs/web/setup#available-libraries
+		<script>var data;</script>
+      	        <script type="module">
+			    // Import the functions you need from the SDKs you need
+			    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.8/firebase-app.js";
+			    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.8/firebase-analytics.js";
+			    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.8/firebase-database.js";
+			   
+			    // TODO: Add SDKs for Firebase products that you want to use
+			    // https://firebase.google.com/docs/web/setup#available-libraries
 
-                    // Your web app's Firebase configuration
-                    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-                    const firebaseConfig = {
-                      apiKey: "AIzaSyBWlX7V0aa6BHRsqjRZ9GGz3sG7zFTJo60",
-                      authDomain: "project-ce84f.firebaseapp.com",
-                      databaseURL: "https://project-ce84f-default-rtdb.firebaseio.com",
-                      projectId: "project-ce84f",
-                      storageBucket: "project-ce84f.appspot.com",
-                      messagingSenderId: "798128275693",
-                      appId: "1:798128275693:web:7214b77399b3db3e870ce4",
-                      measurementId: "G-5M91TSNCPD"
-                    };
+			    // Your web app's Firebase configuration
+			    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+			   
+			    const firebaseConfig = {
+			      apiKey: "AIzaSyBWlX7V0aa6BHRsqjRZ9GGz3sG7zFTJo60",
+			      authDomain: "project-ce84f.firebaseapp.com",
+			      databaseURL: "https://project-ce84f-default-rtdb.firebaseio.com",
+			      projectId: "project-ce84f",
+			      storageBucket: "project-ce84f.appspot.com",
+			      messagingSenderId: "798128275693",
+			      appId: "1:798128275693:web:7214b77399b3db3e870ce4",
+			      measurementId: "G-5M91TSNCPD"
+			    };
 
-                    // Initialize Firebase
-                    const app = initializeApp(firebaseConfig);
-                    const analytics = getAnalytics(app);
+			    // Initialize Firebase
+			    const app = initializeApp(firebaseConfig);
+			    const analytics = getAnalytics(app);
 
-                    const db = getDatabase();
-                    const starCountRef = ref(db, 'LED');
-                //let data;
-                    onValue(starCountRef, (snapshot) => {
-                        data = snapshot.val();
-                        console.log(data);
-                    });
+			    const db = getDatabase();
+			    const starCountRef = ref(db, 'LED');
+			   
+			    onValue(starCountRef, (snapshot) => {
+				data = snapshot.val();
+				console.log(data);
+			    });
 
-                  </script>
+        	</script>
 
                 Web 3 Demo
                 <br >
-                <button onclick="printCoolNumber();">Print Cool Number</button>
-                <button onclick="changeCoolNumber();">Change Cool Number</button>
+                <button onclick="printStatus();">Print Status</button>
+                <button onclick="changeStatus();">Change Status</button>
                 <br /><br />
                 Status: <span id="status">Loading...</span>
 
@@ -60,56 +62,56 @@
 
 
                 <script type="text/javascript">
+			
+		       async function loadWeb3() {
+			   if (window.ethereum) {
+			       window.web3 = new Web3(window.ethereum);
+			       window.ethereum.enable();
+			  }
+			}
 
-                    //Web3 = require('web3');
-               async function loadWeb3() {
-                   if (window.ethereum) {
-                       window.web3 = new Web3(window.ethereum);
-                       window.ethereum.enable();
-                  }
-                }
-
-               async function loadContract() {
-                   return await new window.web3.eth.Contract(ABI, Contract Address);       //  contract ABI & address are the actual arguments
-               }
-
-
-               console.log(data);
+		       async function loadContract() {
+			   return await new window.web3.eth.Contract(ABI, Contract Address);       //  contract ABI & address are the actual arguments
+		       }
 
 
-              async function printCoolNumber() {
-                  updateStatus('fetching Cool Number...');
-                  var st = await window.contract.methods.state().call();
-                  updateStatus(`coolNumber: ${st}`);
-              }
-
-              async function getCurrentAccount() {
-                  const accounts = await window.web3.eth.getAccounts();
-                  return accounts[0];
-              }
-
-              async function changeCoolNumber() {
-                  updateStatus(`Updating State with ${data}`);
-                  const account = await getCurrentAccount();
-                  const coolNumber = await window.contract.methods.setState(data).send({ from: account });
-                  updateStatus('Updated.');
-              }
-
-              async function load() {
-                  await loadWeb3();
-                  window.contract = await loadContract();
-                  updateStatus('Ready!');
-              }
-
-              function updateStatus(status) {
-                  const statusEl = document.getElementById('status');
-                  statusEl.innerHTML = status;
-                  console.log(status);
-              }
+		       console.log(data);
 
 
-              load();  
-  </script>
+		      async function printStatus() {
+			  updateStatus('fetching Status...');
+			  var st = await window.contract.methods.state().call();
+			  updateStatus(`Status: ${st}`);
+		      }
+
+		      async function getCurrentAccount() {
+			  const accounts = await window.web3.eth.getAccounts();
+			  return accounts[0];
+		      }
+
+		      async function changeStatus() {
+			  updateStatus(`Updating State with ${data}`);
+			  const account = await getCurrentAccount();
+			  const st = await window.contract.methods.setState(data).send({ from: account });
+			  updateStatus('Updated.');
+		      }
+
+		      async function load() {
+			  await loadWeb3();
+			  window.contract = await loadContract();
+			  updateStatus('Ready!');
+		      }
+
+		      function updateStatus(status) {
+			  const statusEl = document.getElementById('status');
+			  statusEl.innerHTML = status;
+			  console.log(status);
+		      }
+
+
+		      load(); 
+			
+        	</script>
   
 </body>
 
